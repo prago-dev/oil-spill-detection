@@ -1,3 +1,7 @@
+import os
+from dotenv import load_dotenv
+
+load_dotenv()
 
 import smtplib
 from email.mime.text import MIMEText
@@ -12,12 +16,13 @@ from model.detect import OilSpillDetector
 
 app = Flask(__name__)
 
-# Email Configuration
-ADMIN_EMAIL = "pranaypersonal18@gmail.com"    # yaha admin ka email
-SENDER_EMAIL = "mycollegeproject02@gmail.com"
-SENDER_PASSWORD = "pgbg ejic uekp gxsh"
+# Email Configuration 
+ADMIN_EMAIL = os.getenv("ADMIN_EMAIL")         # yaha admin ka email
+SENDER_EMAIL = os.getenv("SENDER_EMAIL")
+SENDER_PASSWORD = os.getenv("SENDER_PASSWORD")
 #secret key
-app.secret_key = 'manisha'
+app = Flask(__name__)
+app.secret_key = "manisha"
 
 #Mysql Connection
 app.config['MYSQL_HOST'] = 'localhost'
