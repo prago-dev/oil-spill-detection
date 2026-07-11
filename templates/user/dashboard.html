@@ -1,0 +1,140 @@
+{% extends 'user/base.html' %}
+
+{% block title %}User Dashboard • Project{% endblock %}
+
+{% block content %}
+<div class="container-fluid py-4 px-3 px-md-4">
+    <div class="row g-4">
+        <div class="col-lg-3">
+            <div class="glass-card sidebar-card p-3">
+                <nav class="nav flex-lg-column flex-row flex-nowrap overflow-auto small gap-1 sidebar-nav">
+                    <a class="nav-link active" href="#overview">
+                        <span class="nav-icon"><i class="bi bi-speedometer2"></i></span>
+                        Overview
+                    </a>
+                    <a class="nav-link" href="{{ url_for('new_prediction') }}">
+                        <span class="nav-icon"><i class="bi bi-plus-circle"></i></span>
+                        New prediction
+                    </a>
+                    <a class="nav-link" href="{{ url_for('user_history') }}">
+                        <span class="nav-icon"><i class="bi bi-clock-history"></i></span>
+                        History
+                    </a>
+                    <a class="nav-link" href="{{ url_for('user_profile') }}">
+                        <span class="nav-icon"><i class="bi bi-person"></i></span>
+                        Profile
+                    </a>
+                </nav>
+            </div>
+        </div>
+        <div class="col-lg-9">
+            <section id="overview" class="glass-card p-3 p-md-4 mb-4">
+                <div class="d-flex flex-wrap justify-content-between align-items-center mb-3">
+                    <div>
+                        <h4 class="mb-1">Welcome back</h4>
+                        <p class="text-muted mb-0 small">View your recent oil spilling detection and start a new one in seconds.</p>
+                    </div>
+                </div>
+                <div class="row g-3">
+                    <div class="col-sm-6 col-md-4">
+                        <div class="glass-card metric-card p-3 h-100">
+                            <small class="text-uppercase text-muted">Total predictions</small>
+                            <h3 class="mt-2 mb-1">{{ total_predictions }}</h3>
+                            <small class="text-muted">All time</small>
+                        </div>
+                    </div>
+                    <div class="col-sm-6 col-md-4">
+                        <div class="glass-card p-3 h-100">
+                            <small class="text-uppercase text-muted">Low risk</small>
+                            <h3 class="mt-2 mb-1">8</h3>
+                            <small class="badge badge-risk-low">Low</small>
+                        </div>
+                    </div>
+                    <div class="col-sm-6 col-md-4">
+                        <div class="glass-card p-3 h-100">
+                            <small class="text-uppercase text-muted">Last prediction</small>
+                            <h3 class="mt-2 mb-1">2 days ago</h3>
+                            <small class="text-muted">Tap history for details</small>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <section id="new-prediction" class="glass-card p-3 p-md-4 mb-4">
+                <div class="d-flex justify-content-between align-items-center mb-3">
+                    <h5 class="mb-0">Start a new prediction</h5>
+                    <small class="text-muted">Use the main form on the homepage for full inputs.</small>
+                </div>
+                <p class="small text-muted mb-3">Use this shortcut to open the dedicated prediction upload page.</p>
+                <a href="{{ url_for('new_prediction') }}" class="btn btn-gradient btn-sm">
+                    Go to prediction form
+                </a>
+            </section>
+
+            <section id="history" class="glass-card p-3 p-md-4 mb-4">
+                <div class="d-flex justify-content-between align-items-center mb-3">
+                    <h5 class="mb-0">Recent predictions</h5>
+                    <button class="btn btn-sm btn-outline-secondary">Export</button>
+                </div>
+                <div class="table-responsive">
+                    <table class="table align-middle mb-0">
+                        <thead class="small text-muted">
+                        <tr>
+                            <th scope="col">Date</th>
+                            <th scope="col">ID</th>
+                            <th scope="col">Risk</th>
+                            <th scope="col">Notes</th>
+                        </tr>
+                        </thead>
+                        <tbody class="small text-muted">
+                        <tr>
+                            <td>28 Nov 2025</td>
+                            <td>#BC-1201</td>
+                            <td><span class="badge badge-risk-low">Low</span></td>
+                            <td>Routine screening</td>
+                        </tr>
+                        <tr>
+                            <td>26 Nov 2025</td>
+                            <td>#BC-1198</td>
+                            <td><span class="badge badge-risk-medium">Medium</span></td>
+                            <td>Follow-up check</td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </section>
+
+            <section id="profile" class="glass-card p-3 p-md-4">
+                <div class="d-flex justify-content-between align-items-center mb-3">
+                    <h5 class="mb-0">Profile & preferences</h5>
+                    <button class="btn btn-sm btn-gradient">Save</button>
+                </div>
+                <form class="small row g-3">
+                    <div class="col-md-6">
+                        <label class="form-label">Full name</label>
+                        <input type="text" class="form-control" placeholder="Your name">
+                    </div>
+                    <div class="col-md-6">
+                        <label class="form-label">Email</label>
+                        <input type="email" class="form-control" placeholder="you@example.com">
+                    </div>
+                    <div class="col-md-6">
+                        <label class="form-label">Preferred contact</label>
+                        <select class="form-select">
+                            <option selected>Email</option>
+                            <option>Phone</option>
+                        </select>
+                    </div>
+                    <div class="col-md-6">
+                        <label class="form-label">Notifications</label>
+                        <select class="form-select">
+                            <option selected>Important updates only</option>
+                            <option>All activity</option>
+                        </select>
+                    </div>
+                </form>
+            </section>
+        </div>
+    </div>
+</div>
+{% endblock %}

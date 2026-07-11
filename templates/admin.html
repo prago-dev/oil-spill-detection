@@ -1,0 +1,279 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Admin Dashboard • Project</title>
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+    <style>
+        :root {
+            --bg-dark: #f1f5f9;
+            --bg-deep: #ffffff;
+            --accent: #2563eb;
+            --accent-alt: #0ea5e9;
+            --text-primary: #0f172a;
+            --text-muted: #64748b;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            min-height: 100vh;
+            background: radial-gradient(circle at top, rgba(37, 99, 235, 0.10), transparent 45%), var(--bg-dark);
+            color: var(--text-primary);
+        }
+
+        .glass-nav {
+            background: rgba(255, 255, 255, 0.9);
+            border-bottom: 1px solid rgba(13, 19, 33, 0.08);
+            backdrop-filter: blur(16px);
+        }
+
+        .glass-card {
+            backdrop-filter: blur(18px);
+            background: rgba(255, 255, 255, 0.9);
+            border-radius: 20px;
+            border: 1px solid rgba(13, 19, 33, 0.06);
+            box-shadow: 0 20px 45px rgba(15, 15, 35, 0.12);
+        }
+
+        .metric-card h3 {
+            font-family: 'Space Grotesk', sans-serif;
+        }
+
+        .badge-pill {
+            background: rgba(14, 165, 233, 0.15);
+            color: var(--accent);
+            border-radius: 999px;
+            padding: 0.4rem 1.1rem;
+            font-weight: 600;
+            letter-spacing: 0.04em;
+            font-size: 0.75rem;
+            text-transform: uppercase;
+        }
+
+        .btn-gradient {
+            background: linear-gradient(120deg, var(--accent), var(--accent-alt));
+            border: none;
+            border-radius: 14px;
+            padding: 0.6rem 1.5rem;
+            font-weight: 600;
+            box-shadow: 0 12px 30px rgba(37, 99, 235, 0.35);
+        }
+
+        .sidebar {
+            min-height: calc(100vh - 72px);
+        }
+
+        .sidebar .nav-link {
+            color: var(--text-muted);
+            border-radius: 12px;
+            padding: 0.6rem 0.9rem;
+            font-size: 0.9rem;
+        }
+
+        .sidebar .nav-link.active,
+        .sidebar .nav-link:hover {
+            color: var(--text-primary);
+            background: rgba(37, 99, 235, 0.08);
+        }
+
+        .table thead th {
+            font-size: 0.8rem;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        footer {
+            color: var(--text-muted);
+            font-size: 0.85rem;
+        }
+    </style>
+</head>
+<body>
+<nav class="navbar navbar-expand-lg glass-nav navbar-light sticky-top py-3">
+    <div class="container-fluid px-4">
+        <a class="navbar-brand fw-semibold" href="{{ url_for('index') }}">AI Oil Spilling</a>
+        <div class="ms-auto d-flex align-items-center gap-2">
+            <a href="{{ url_for('index') }}" class="btn btn-sm btn-outline-secondary">View site</a>
+            <a href="{{ url_for('login') }}" class="btn btn-sm btn-gradient">Log out</a>
+        </div>
+    </div>
+</nav>
+
+<div class="container-fluid py-4 px-4">
+    <div class="row g-4">
+        <div class="col-md-3">
+            <div class="glass-card sidebar p-3 d-flex flex-column gap-2">
+                <div class="d-flex justify-content-between align-items-center mb-2">
+                    <span class="badge-pill">Admin Panel</span>
+                </div>
+                <nav class="nav flex-column small">
+                    <a class="nav-link active" href="#overview">Overview</a>
+                    <a class="nav-link" href="#users">Users</a>
+                    <a class="nav-link" href="#predictions">Predictions</a>
+                    <a class="nav-link" href="#settings">Settings</a>
+                </nav>
+            </div>
+        </div>
+
+        <div class="col-md-9">
+            <div id="overview" class="glass-card p-3 p-md-4 mb-4">
+                <div class="d-flex flex-wrap justify-content-between align-items-center mb-3">
+                    <div>
+                        <h4 class="mb-1">Dashboard overview</h4>
+                        <p class="text-muted mb-0 small">Monitor users, prediction activity and system health.</p>
+                    </div>
+                    <button class="btn btn-gradient btn-sm mt-2 mt-md-0">Generate report</button>
+                </div>
+                <div class="row g-3">
+                    <div class="col-md-4">
+                        <div class="glass-card metric-card p-3 h-100">
+                            <small class="text-uppercase text-muted">Total users</small>
+                            <h3 class="mt-2 mb-1">128</h3>
+                            <small class="text-success">+12 this week</small>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="glass-card metric-card p-3 h-100">
+                            <small class="text-uppercase text-muted">Predictions (24h)</small>
+                            <h3 class="mt-2 mb-1">342</h3>
+                            <small class="text-muted">Avg. latency &lt; 2s</small>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="glass-card metric-card p-3 h-100">
+                            <small class="text-uppercase text-muted">System status</small>
+                            <h3 class="mt-2 mb-1 text-success">Healthy</h3>
+                            <small class="text-muted">No incidents reported</small>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div id="users" class="glass-card p-3 p-md-4 mb-4">
+                <div class="d-flex justify-content-between align-items-center mb-3">
+                    <h5 class="mb-0">Recent users</h5>
+                    <button class="btn btn-sm btn-outline-secondary">View all</button>
+                </div>
+                <div class="table-responsive">
+                    <table class="table align-middle mb-0">
+                        <thead>
+                        <tr>
+                            <th scope="col">Name</th>
+                            <th scope="col">Role</th>
+                            <th scope="col">Last login</th>
+                            <th scope="col">Status</th>
+                        </tr>
+                        </thead>
+                        <tbody class="small text-muted">
+                        <tr>
+                            <td>Dr. Elena Moritz</td>
+                            <td>Oncologist</td>
+                            <td>2 hours ago</td>
+                            <td><span class="badge bg-success-subtle text-success">Active</span></td>
+                        </tr>
+                        <tr>
+                            <td>Research Team A</td>
+                            <td>Researcher</td>
+                            <td>5 hours ago</td>
+                            <td><span class="badge bg-success-subtle text-success">Active</span></td>
+                        </tr>
+                        <tr>
+                            <td>Clinic West</td>
+                            <td>Clinic admin</td>
+                            <td>Yesterday</td>
+                            <td><span class="badge bg-secondary-subtle text-secondary">Idle</span></td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <div id="predictions" class="glass-card p-3 p-md-4 mb-4">
+                <div class="d-flex justify-content-between align-items-center mb-3">
+                    <h5 class="mb-0">Prediction activity</h5>
+                    <button class="btn btn-sm btn-outline-secondary">Export CSV</button>
+                </div>
+                <p class="text-muted small mb-2">Hook this section to your real prediction logs. Currently showing placeholder data.</p>
+                <div class="table-responsive">
+                    <table class="table align-middle mb-0">
+                        <thead>
+                        <tr>
+                            <th scope="col">Request ID</th>
+                            <th scope="col">User</th>
+                            <th scope="col">Risk score</th>
+                            <th scope="col">Latency</th>
+                            <th scope="col">Time</th>
+                        </tr>
+                        </thead>
+                        <tbody class="small text-muted">
+                        <tr>
+                            <td>#BC-10234</td>
+                            <td>Clinic West</td>
+                            <td>High</td>
+                            <td>1.8s</td>
+                            <td>10:24</td>
+                        </tr>
+                        <tr>
+                            <td>#BC-10233</td>
+                            <td>Dr. Elena</td>
+                            <td>Low</td>
+                            <td>1.2s</td>
+                            <td>10:18</td>
+                        </tr>
+                        <tr>
+                            <td>#BC-10232</td>
+                            <td>Research Team A</td>
+                            <td>Medium</td>
+                            <td>2.1s</td>
+                            <td>10:05</td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <div id="settings" class="glass-card p-3 p-md-4">
+                <div class="d-flex justify-content-between align-items-center mb-3">
+                    <h5 class="mb-0">System settings</h5>
+                    <button class="btn btn-sm btn-gradient">Save changes</button>
+                </div>
+                <form class="small">
+                    <div class="row g-3">
+                        <div class="col-md-6">
+                            <label class="form-label">Maintenance mode</label>
+                            <select class="form-select">
+                                <option selected>Disabled</option>
+                                <option>Enabled</option>
+                            </select>
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label">Max concurrent predictions</label>
+                            <input type="number" class="form-control" value="50">
+                        </div>
+                        <div class="col-12">
+                            <label class="form-label">Admin notification email</label>
+                            <input type="email" class="form-control" placeholder="admin@example.com">
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <footer class="pt-4 mt-4 border-top">
+        <div class="d-flex flex-column flex-md-row justify-content-between align-items-center">
+            <span>Admin dashboard • Project</span>
+            <small>Hook these widgets to your real database and logs.</small>
+        </div>
+    </footer>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

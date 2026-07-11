@@ -1,0 +1,82 @@
+{% extends 'user/base.html' %}
+
+{% block title %}User Profile • Oil Spilling{% endblock %}
+
+{% block content %}
+<div class="container py-4 px-3 px-md-4">
+    <div class="d-flex profile-layout gap-3 gap-md-4 align-items-start flex-wrap">
+        <div class="glass-card p-3 p-md-4 flex-grow-1">
+            {% with messages = get_flashed_messages(with_categories=true) %}
+            {% if messages %}
+                {% for category, message in messages %}
+                    <div class="alert alert-{{ 'success' if category == 'success' else 'info' }} alert-dismissible fade show mb-3" role="alert">
+                        {{ message }}
+                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                    </div>
+                {% endfor %}
+            {% endif %}
+            {% endwith %}
+            <form method="post" action="{{ url_for('user_profile') }}">
+            <div class="d-flex flex-wrap align-items-center gap-3 mb-3">
+                <div class="avatar-wrapper">
+                    <div class="avatar-inner">
+                        <i class="bi bi-person"></i>
+                    </div>
+                </div>
+                <div>
+                    <h4 class="mb-1">{{ user.name if user else 'User name' }}</h4>
+                    <p class="text-muted mb-2 small">Manage your personal information and preferences.</p>
+                    <span class="badge bg-primary-subtle text-primary badge-pill">Oil Spilling User</span>
+                </div>
+            </div>
+
+            <hr class="my-3">
+
+            <div class="row g-3">
+                <div class="col-md-6">
+                    <p class="section-title mb-2">Basic information</p>
+                    <div class="mb-2 small text-muted">Update your contact and identity details.</div>
+                    <div class="row g-3">
+                        <div class="col-12">
+                            <label class="form-label small mb-1">Full name</label>
+                            <input type="text" class="form-control" name="name" placeholder="Your name" value="{{ user.name if user else '' }}">
+                        </div>
+                        <div class="col-12">
+                            <label class="form-label small mb-1">Email</label>
+                            <input type="email" class="form-control" name="email" placeholder="you@example.com" value="{{ user.email if user else '' }}">
+                        </div>
+                        <div class="col-12">
+                            <label class="form-label small mb-1">Mobile</label>
+                            <input type="text" class="form-control" name="mobile" placeholder="+91-00000-00000" value="{{ user.mobile if user else '' }}">
+                        </div>
+                        <div class="col-12">
+                            <label class="form-label small mb-1">City</label>
+                            <input type="text" class="form-control" name="city" placeholder="Your city" value="{{ user.city if user else '' }}">
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <p class="section-title mb-2">Account & preferences</p>
+                    <div class="mb-2 small text-muted">Control how we contact you and secure your account.</div>
+                    <div class="row g-3">
+                        <div class="col-12">
+                            <label class="form-label small mb-1">Username</label>
+                            <input type="text" class="form-control" name="username" placeholder="username" value="{{ user.username if user else '' }}">
+                        </div>
+                        <div class="col-12">
+                            <label class="form-label small mb-1">Address</label>
+                            <textarea class="form-control" name="address" rows="2" placeholder="Your address">{{ user.address if user else '' }}</textarea>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="mt-4 d-flex justify-content-end gap-2">
+                <button class="btn btn-outline-secondary btn-sm" type="button" onclick="window.location.reload()">Cancel</button>
+                <button class="btn btn-primary btn-sm" type="submit">Save changes</button>
+            </div>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}

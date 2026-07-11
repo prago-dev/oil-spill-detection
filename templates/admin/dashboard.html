@@ -1,0 +1,99 @@
+{% extends 'admin/base.html' %}
+
+{% block title %}Admin Dashboard • Project{% endblock %}
+
+{% block content %}
+    <div class="row g-4">
+        <div class="col-md-3">
+            <div class="glass-card sidebar p-3 mb-3 mb-md-0">
+                <nav class="nav flex-md-column flex-row flex-nowrap overflow-auto small gap-1">
+                    <a class="nav-link active" href="#overview">
+                        <span class="nav-icon"><i class="bi bi-speedometer2"></i></span>
+                        Overview
+                    </a>
+                   <a class="nav-link" href="{{ url_for('admin_user_list') }}">
+    <span class="nav-icon"><i class="bi bi-people"></i></span>
+    Users
+</a>
+                    <a class="nav-link" href="{{ url_for('admin_history') }}">
+                        <span class="nav-icon"><i class="bi bi-clock-history"></i></span>
+                        History
+                    </a>
+
+                </nav>
+            </div>
+        </div>
+        <div class="col-md-9">
+            <section id="overview" class="glass-card p-3 p-md-4 mb-4">
+                <div class="d-flex flex-wrap justify-content-between align-items-center mb-3">
+                    <div>
+                        <h4 class="mb-1">Admin dashboard</h4>
+                        <p class="text-muted mb-0 small">High level view of users, predictions and system status.</p>
+                    </div>
+                    <button class="btn btn-gradient btn-sm mt-2 mt-md-0">Generate report</button>
+                </div>
+                <div class="row g-3">
+                    <div class="col-md-4 col-sm-6">
+                        <div class="glass-card metric-card p-3 h-100">
+                            <small class="text-uppercase text-muted">Total users</small>
+                            <h3 class="mt-2 mb-1">{{ total_users }}</h3>
+                            <small class="text-muted">All registered users</small>
+                        </div>
+                    </div>
+                    <div class="col-md-4 col-sm-6">
+                        <div class="glass-card p-3 h-100">
+                            <small class="text-uppercase text-muted">Predictions (24h)</small>
+                            <h3 class="mt-2 mb-1">{{ predictions_24h }}</h3>
+                            <small class="text-muted">Uploaded in last 24 hours</small>
+                        </div>
+                    </div>
+                    <div class="col-md-4 col-sm-6">
+                        <div class="glass-card p-3 h-100">
+                            <small class="text-uppercase text-muted">System status</small>
+                            <h3 class="mt-2 mb-1 text-success">Healthy</h3>
+                            <small class="text-muted">No incidents reported</small>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <section id="users" class="glass-card p-3 p-md-4 mb-4">
+                <div class="d-flex justify-content-between align-items-center mb-3">
+                    <h5 class="mb-0">Recent users</h5>
+                    <a href="{{ url_for('admin_user_list') }}" class="btn btn-sm btn-outline-secondary">View all</a>
+                </div>
+                <div class="table-responsive">
+                    <table class="table align-middle mb-0">
+                        <thead class="small text-muted">
+                        <tr>
+                            <th scope="col">Name</th>
+                            <th scope="col">Username</th>
+                            <th scope="col">Email</th>
+                            <th scope="col">City</th>
+                        </tr>
+                        </thead>
+                        <tbody class="small text-muted">
+                        {% if recent_users %}
+                            {% for user in recent_users %}
+                                <tr>
+                                    <td>{{ user.name }}</td>
+                                    <td>{{ user.username }}</td>
+                                    <td>{{ user.email }}</td>
+                                    <td>{{ user.city }}</td>
+                                </tr>
+                            {% endfor %}
+                        {% else %}
+                            <tr>
+                                <td colspan="4" class="text-center text-muted">No users found.</td>
+                            </tr>
+                        {% endif %}
+                        </tbody>
+                    </table>
+                </div>
+            </section>
+
+
+
+        </div>
+    </div>
+{% endblock %}

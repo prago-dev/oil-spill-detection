@@ -1,0 +1,739 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Oil_spilling</title>
+
+    <!-- Bootstrap -->
+    <link
+        href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css"
+        rel="stylesheet"
+        integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN"
+        crossorigin="anonymous"
+    >
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600&family=Inter:wght@400;500;600;700&display=swap"
+        rel="stylesheet"
+    >
+    <style>
+        html {
+            scroll-behavior: smooth;
+        }
+
+        :root {
+            --bg-dark: #f1f5f9;
+            --bg-deep: #ffffff;
+            --accent: #2563eb;
+            --accent-alt: #0ea5e9;
+            --text-primary: #0f172a;
+            --text-muted: #64748b;
+            --card-bg: rgba(255, 255, 255, 0.9);
+            --border-glow: rgba(37, 99, 235, 0.25);
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: radial-gradient(circle at top, rgba(37, 99, 235, 0.08), transparent 45%), var(--bg-dark);
+            color: var(--text-primary);
+            min-height: 100vh;
+            transition: background 0.4s ease, color 0.4s ease;
+        }
+
+        .glass-card {
+            backdrop-filter: blur(18px);
+            background: var(--card-bg);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            border-radius: 20px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.35);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .glass-card:hover {
+            transform: translateY(-6px);
+            box-shadow: 0 26px 70px rgba(0, 0, 0, 0.5);
+        }
+
+        .glass-card {
+            box-shadow: 0 20px 40px rgba(15, 15, 35, 0.12);
+        }
+
+        .gradient-border {
+            position: relative;
+        }
+
+        .gradient-border::before {
+            content: "";
+            position: absolute;
+            inset: -1px;
+            border-radius: inherit;
+            padding: 1px;
+            background: linear-gradient(130deg, var(--accent), var(--accent-alt));
+            -webkit-mask:
+                linear-gradient(#fff 0 0) content-box,
+                linear-gradient(#fff 0 0);
+            mask:
+                linear-gradient(#fff 0 0) content-box,
+                linear-gradient(#fff 0 0);
+            -webkit-mask-composite: xor;
+            mask-composite: exclude;
+            pointer-events: none;
+        }
+
+        .ai-spark {
+            position: absolute;
+            width: 340px;
+            height: 340px;
+            border-radius: 50%;
+            background: radial-gradient(circle, rgba(14, 165, 233, 0.25), transparent 65%);
+            filter: blur(20px);
+            animation: float 12s ease-in-out infinite;
+            z-index: 0;
+        }
+
+        .ai-spark.spark-2 {
+            background: radial-gradient(circle, rgba(37, 99, 235, 0.25), transparent 70%);
+            animation-delay: 4s;
+        }
+
+        .bg-orbit {
+            position: fixed;
+            width: 420px;
+            height: 420px;
+            border-radius: 50%;
+            border: 1px solid rgba(37, 99, 235, 0.18);
+            box-shadow: 0 0 80px rgba(37, 99, 235, 0.18);
+            opacity: 0.5;
+            z-index: -1;
+            pointer-events: none;
+            animation: bg-orbit-spin 40s linear infinite;
+        }
+
+        .bg-orbit::before {
+            content: "";
+            position: absolute;
+            inset: 20%;
+            border-radius: 50%;
+            border: 1px dashed rgba(14, 165, 233, 0.4);
+        }
+
+        .bg-orbit-1 {
+            top: -120px;
+            right: -120px;
+        }
+
+        .bg-orbit-2 {
+            bottom: -160px;
+            left: -80px;
+            transform: scale(0.9);
+            animation-duration: 55s;
+            animation-direction: reverse;
+        }
+
+        @keyframes bg-orbit-spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        @keyframes float {
+            0%   { transform: translate3d(-20px, -10px, 0); }
+            50%  { transform: translate3d(20px, 30px, 0); }
+            100% { transform: translate3d(-20px, -10px, 0); }
+        }
+
+        .hero {
+            position: relative;
+            overflow: hidden;
+        }
+
+        .hero h1 {
+            font-family: 'Space Grotesk', sans-serif;
+            font-weight: 600;
+            font-size: clamp(2.5rem, 4vw, 4rem);
+        }
+
+        .hero-3d-card {
+            position: relative;
+            border-radius: 26px;
+            overflow: hidden;
+            background: radial-gradient(circle at 10% 0%, rgba(255, 255, 255, 0.95), transparent 55%),
+                        linear-gradient(145deg, rgba(37, 99, 235, 0.16), rgba(14, 165, 233, 0.12));
+            box-shadow:
+                0 24px 60px rgba(15, 15, 35, 0.25),
+                0 0 0 1px rgba(255, 255, 255, 0.6);
+            transform-origin: center left;
+            animation: hero-card-tilt 14s ease-in-out infinite;
+        }
+
+        .hero-3d-card::before {
+            content: "";
+            position: absolute;
+            inset: 0;
+            background: radial-gradient(circle at 80% 20%, rgba(14, 165, 233, 0.25), transparent 55%);
+            mix-blend-mode: screen;
+            pointer-events: none;
+        }
+
+        .hero-3d-card::after {
+            content: "";
+            position: absolute;
+            width: 120%;
+            height: 180%;
+            top: -40%;
+            left: -10%;
+            background: linear-gradient(120deg, rgba(255, 255, 255, 0.0), rgba(255, 255, 255, 0.35), rgba(255, 255, 255, 0.0));
+            opacity: 0.0;
+            transform: translateX(-40%);
+            mix-blend-mode: screen;
+            animation: hero-card-sheen 9s ease-in-out infinite;
+            pointer-events: none;
+        }
+
+        .hero-3d-card:hover {
+            animation-play-state: paused;
+            box-shadow:
+                0 32px 80px rgba(15, 15, 35, 0.35),
+                0 0 0 1px rgba(255, 255, 255, 0.8);
+        }
+
+        .hero-3d-card img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            display: block;
+            transform-origin: center;
+            animation: hero-card-zoom 18s ease-in-out infinite;
+        }
+
+        @keyframes hero-card-tilt {
+            0%   { transform: perspective(1200px) rotateY(-10deg) rotateX(4deg) translateY(0); }
+            25%  { transform: perspective(1200px) rotateY(-4deg) rotateX(2deg) translateY(-4px); }
+            50%  { transform: perspective(1200px) rotateY(-8deg) rotateX(4deg) translateY(0); }
+            75%  { transform: perspective(1200px) rotateY(-6deg) rotateX(3deg) translateY(4px); }
+            100% { transform: perspective(1200px) rotateY(-10deg) rotateX(4deg) translateY(0); }
+        }
+
+        @keyframes hero-card-zoom {
+            0%   { transform: scale(1); }
+            50%  { transform: scale(1.03); }
+            100% { transform: scale(1); }
+        }
+
+        @keyframes hero-card-sheen {
+            0%, 55%  {
+                opacity: 0;
+                transform: translateX(-40%);
+            }
+            65% {
+                opacity: 0.7;
+            }
+            80%, 100% {
+                opacity: 0;
+                transform: translateX(60%);
+            }
+        }
+
+        .ai-module {
+            position: relative;
+            width: 70px;
+            height: 70px;
+            border-radius: 24px;
+            background: radial-gradient(circle at 30% 20%, rgba(255, 255, 255, 0.9), transparent 55%),
+                        linear-gradient(135deg, rgba(37, 99, 235, 0.16), rgba(14, 165, 233, 0.12));
+            box-shadow: 0 12px 30px rgba(0, 0, 0, 0.2);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+            animation: float 8s ease-in-out infinite;
+        }
+
+        .ai-module-core {
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            background: radial-gradient(circle, #2563eb, #0ea5e9);
+            position: relative;
+            box-shadow: 0 0 0 0 rgba(37, 99, 235, 0.4);
+            animation: pulse-core 2.4s ease-out infinite;
+        }
+
+        .ai-module-orbit {
+            position: absolute;
+            width: 48px;
+            height: 48px;
+            border-radius: 50%;
+            border: 1px dashed rgba(255, 255, 255, 0.5);
+            animation: orbit 9s linear infinite;
+        }
+
+        @keyframes pulse-core {
+            0% { box-shadow: 0 0 0 0 rgba(37, 99, 235, 0.4); }
+            70% { box-shadow: 0 0 0 12px rgba(37, 99, 235, 0); }
+            100% { box-shadow: 0 0 0 0 rgba(37, 99, 235, 0); }
+        }
+
+        @keyframes orbit {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        .hero p.lead {
+            color: var(--text-muted);
+            max-width: 600px;
+        }
+
+        .badge-pill {
+            background: rgba(14, 165, 233, 0.15);
+            color: var(--accent);
+            border-radius: 999px;
+            padding: 0.6rem 1.5rem;
+            font-weight: 600;
+            letter-spacing: 0.04em;
+        }
+
+        .stat-card span {
+            color: var(--text-muted);
+            font-size: 0.9rem;
+        }
+
+        .feature-icon {
+            width: 54px;
+            height: 54px;
+            border-radius: 14px;
+            background: rgba(255, 255, 255, 0.05);
+            display: grid;
+            place-items: center;
+            font-size: 1.4rem;
+            transition: transform 0.3s ease, background 0.3s ease;
+        }
+
+        .feature-icon:hover {
+            transform: translateY(-3px) scale(1.03);
+            background: rgba(37, 99, 235, 0.12);
+        }
+
+        .neon-divider {
+            width: 120px;
+            height: 2px;
+            background: linear-gradient(90deg, transparent, var(--accent), transparent);
+            margin: 1.5rem 0;
+        }
+
+        .form-control,
+        .form-select {
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            color: var(--text-primary);
+            padding: 0.85rem 1rem;
+            border-radius: 14px;
+        }
+
+        .form-control:focus {
+            border-color: var(--accent);
+            box-shadow: 0 0 0 0.25rem rgba(37, 99, 235, 0.15);
+            background: rgba(255, 255, 255, 0.98);
+            color: var(--text-primary);
+        }
+
+        .btn-gradient {
+            background: linear-gradient(120deg, var(--accent), var(--accent-alt));
+            border: none;
+            border-radius: 14px;
+            padding: 0.9rem 2.6rem;
+            font-weight: 600;
+            box-shadow: 0 12px 30px rgba(37, 99, 235, 0.35);
+        }
+
+        .btn-gradient:hover {
+            opacity: 0.92;
+            transform: translateY(-1px);
+        }
+
+        .prediction-panel {
+            background: linear-gradient(145deg, rgba(255, 255, 255, 0.08), rgba(255, 255, 255, 0.02));
+            border-radius: 22px;
+            border: 1px solid rgba(255, 255, 255, 0.08);
+        }
+
+        footer {
+            color: var(--text-muted);
+            font-size: 0.9rem;
+        }
+
+        .glass-nav {
+            background:
+                radial-gradient(circle at 0% 0%, rgba(255, 255, 255, 0.24), transparent 55%),
+                linear-gradient(120deg, #2563eb, #0ea5e9, #38bdf8, #1d4ed8);
+            background-size: 220% 220%;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.22);
+            backdrop-filter: blur(18px);
+            box-shadow: 0 10px 28px rgba(15, 15, 35, 0.35);
+            border-radius: 18px;
+            margin-top: 0.75rem;
+            margin-inline: 1rem;
+            position: relative;
+            overflow: hidden;
+            animation: navGradientShift 14s ease-in-out infinite;
+        }
+
+        .glass-nav::before {
+            content: "";
+            position: absolute;
+            inset: 0;
+            background: radial-gradient(circle at 120% -20%, rgba(255, 255, 255, 0.35), transparent 55%);
+            mix-blend-mode: screen;
+            opacity: 0.7;
+            pointer-events: none;
+            animation: navLightSweep 11s linear infinite;
+        }
+
+        .theme-toggle {
+            border-radius: 999px;
+            gap: 0.5rem;
+            display: inline-flex;
+            align-items: center;
+        }
+
+        .navbar-nav .nav-link {
+            color: rgba(255, 255, 255, 0.78);
+            position: relative;
+            font-weight: 500;
+            letter-spacing: 0.01em;
+        }
+
+        .navbar-nav .nav-link.active,
+        .navbar-nav .nav-link:hover {
+            color: #ffffff;
+        }
+
+        .navbar-nav .nav-link::after {
+            content: "";
+            position: absolute;
+            left: 0;
+            bottom: 0.15rem;
+            width: 0;
+            height: 2px;
+            background: rgba(255, 255, 255, 0.9);
+            border-radius: 999px;
+            transition: width 0.25s ease;
+        }
+
+        .navbar-nav .nav-link:hover::after,
+        .navbar-nav .nav-link.active::after {
+            width: 60%;
+        }
+
+        .navbar-brand {
+            color: #ffffff;
+            letter-spacing: 0.03em;
+            text-transform: uppercase;
+            font-size: 0.95rem;
+        }
+
+        .navbar-toggler {
+            border-color: rgba(255, 255, 255, 0.55);
+        }
+
+        .navbar-toggler-icon {
+            filter: invert(1) contrast(2);
+        }
+
+        .btn-outline-light {
+            color: #ffffff;
+            border-color: rgba(255, 255, 255, 0.6);
+            background-color: transparent;
+        }
+
+        .btn-outline-light:hover {
+            background-color: rgba(255, 255, 255, 0.12);
+            border-color: rgba(255, 255, 255, 0.9);
+        }
+
+        @keyframes navGradientShift {
+            0%   { background-position: 0% 50%; }
+            50%  { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        @keyframes navLightSweep {
+            0%   { transform: translateX(-20%); opacity: 0.0; }
+            20%  { opacity: 0.7; }
+            50%  { transform: translateX(0%); }
+            80%  { opacity: 0.0; }
+            100% { transform: translateX(20%); opacity: 0.0; }
+        }
+
+        @media (max-width: 768px) {
+            .ai-spark {
+                display: none;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="bg-orbit bg-orbit-1"></div>
+    <div class="bg-orbit bg-orbit-2"></div>
+    <nav class="navbar navbar-expand-lg glass-nav navbar-light sticky-top py-3">
+        <div class="container">
+            <a class="navbar-brand fw-semibold" href="{{ url_for('index') }}">AI Oil Spilling</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navMenu" aria-controls="navMenu" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navMenu">
+                <ul class="navbar-nav ms-auto mb-2 mb-lg-0 align-items-lg-center">
+                    {% if session.get('role') == 'admin' %}
+                        <li class="nav-item">
+                            <a class="nav-link" href="{{ url_for('admin_dashboard') }}">Dashboard</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="{{ url_for('admin_user_list') }}">User list</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="/admin/dashboard#history">History</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="#support">Support</a>
+                        </li>
+                        <li class="nav-item ms-lg-2 mt-2 mt-lg-0">
+                            <a href="{{ url_for('logout') }}" class="btn btn-sm btn-outline-light">Log out</a>
+                        </li>
+                    {% elif session.get('role') == 'user' %}
+                        <li class="nav-item">
+                            <a class="nav-link" href="{{ url_for('new_prediction') }}">New prediction</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="{{ url_for('user_history') }}">History</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="{{ url_for('user_dashboard') }}">Dashboard</a>
+                        </li>
+                    {% else %}
+                        <li class="nav-item">
+                            <a class="nav-link" href="{{ url_for('index') }}">Home</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="{{ url_for('login') }}">User</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="{{ url_for('admin') }}">Admin</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="#support">Support</a>
+                        </li>
+                    {% endif %}
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <div id="hero" class="hero position-relative py-5">
+        <div class="ai-spark" style="top:-100px;left:-50px;"></div>
+        <div class="ai-spark spark-2" style="bottom:-120px;right:-40px;"></div>
+
+        <div class="container py-4 position-relative" style="z-index: 1;">
+            <div class="row align-items-center g-5">
+                <div class="col-lg-7">
+                    <span class="badge-pill">oli spilling </span>
+                    <div class="d-flex align-items-center gap-3 flex-wrap mt-4">
+                        <h1 class="mb-0">
+                           Oil spilling causes serious damage to oceans, wildlife, and coastal communities.
+                        </h1>
+                        <div class="ai-module">
+                            <div class="ai-module-core"></div>
+                            <div class="ai-module-orbit"></div>
+                        </div>
+                    </div>
+                    <p class="lead mt-3">
+Powered by advanced AI models trained on global environmental data to monitor, detect, and prevent the devastating impact of oil spills on marine ecosystems.                    </p>
+                    <div class="d-flex flex-wrap gap-3 mt-4">
+                        <div class="glass-card stat-card px-4 py-3">
+                            <h3 class="mb-0 fw-bold">97.4%</h3>
+                            <span>validated accuracy</span>
+                        </div>
+                        {% if prediction_message %}
+                        <div class="alert alert-info mt-3 mb-0 text-start">
+                            {{ prediction_message }}
+                        </div>
+                        {% endif %}
+                        <div class="glass-card stat-card px-4 py-3">
+                            <h3 class="mb-0 fw-bold">45K+</h3>
+                            <span>profiles processed</span>
+                        </div>
+                        <div class="glass-card stat-card px-4 py-3">
+                            <h3 class="mb-0 fw-bold">&lt;2s</h3>
+                            <span>prediction time</span>
+                        </div>
+                    </div>
+                    <div class="mt-5 d-flex align-items-center gap-3">
+                        <button class="btn btn-gradient px-4">Start Prediction</button>
+
+                    </div>
+                </div>
+                <div class="col-lg-5 d-none d-md-block">
+                    <div class="hero-3d-card">
+                        <img src="static/images/oil_spilling.jpg" alt="Aerial view of ocean oil spill" loading="lazy">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <section id="features" class="py-5">
+        <div class="container">
+            <div class="row g-4">
+                <div class="col-md-4">
+                    <div class="glass-card p-4 h-100">
+                        <div class="d-flex align-items-center justify-content-between mb-3">
+                            <div class="feature-icon me-2">
+                                <i class="bi bi-cpu"></i>
+                            </div>
+                            <div class="ai-module" style="width:46px;height:46px;border-radius:18px;animation-duration:10s;">
+                                <div class="ai-module-core" style="width:22px;height:22px;"></div>
+                                <div class="ai-module-orbit" style="width:34px;height:34px;"></div>
+                            </div>
+                        </div>
+                        <h5>Environmental Data Fusion</h5>
+                        <p class="text-muted mb-0">
+                            Combines satellite imagery, sensor data, and oceanographic signals to detect and assess oil spills accurately.
+                        </p>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="glass-card p-4 h-100">
+                        <div class="feature-icon mb-3">
+                            <i class="bi bi-graph-up"></i>
+                        </div>
+                        <h5>Explainable Outcomes </h5>
+                        <p class="text-muted mb-0">
+                            Provides clear, interpretable insights showing spill origin, spread patterns, and environmental impact.
+                        </p>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="glass-card p-4 h-100">
+                        <div class="feature-icon mb-3">
+                            <i class="bi bi-shield-check"></i>
+                        </div>
+                        <h5>HIPAA-Ready Security</h5>
+                        <p class="text-muted mb-0">
+                            End-to-end encryption ensures safe handling of sensitive environmental and monitoring data.
+                        </p>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </section>
+
+    <section id="trust" class="py-5">
+        <div class="container">
+            <div class="row align-items-center g-5">
+                <div class="col-lg-6">
+                    <div class="glass-card p-4">
+                        <div class="d-flex align-items-center justify-content-between">
+                            <div>
+                                <small class="text-uppercase text-muted">AI Observability</small>
+                                <h3 class="mt-3 mb-0">Trust every prediction.</h3>
+                            </div>
+                            <div class="ai-module" style="width:54px;height:54px;border-radius:20px;animation-duration:11s;">
+                                <div class="ai-module-core" style="width:24px;height:24px;"></div>
+                                <div class="ai-module-orbit" style="width:38px;height:38px;"></div>
+                            </div>
+                        </div>
+                        <p class="text-muted">
+                            Real-time monitoring, drift detection, and calibration metrics keep the model reliable across diverse populations and imaging modalities.
+                        </p>
+                        <div class="row text-center">
+                            <div class="col-4">
+                                <h4 class="fw-bold text-white">120+</h4>
+                                <small class="text-muted"></small>
+                            </div>
+                            <div class="col-4">
+                                <h4 class="fw-bold text-white">5x</h4>
+                                <small class="text-muted"></small>
+                            </div>
+                            <div class="col-4">
+                                <h4 class="fw-bold text-white">24/7</h4>
+                                <small class="text-muted"></small>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+            <div class="row mt-5 align-items-center">
+                <div class="col-lg-5 mb-4 mb-lg-0">
+                    <div class="hero-3d-card">
+                        <div class="ratio ratio-16x9">
+                            <iframe width="560" height="315" src="https://www.youtube.com/embed/jluxHIGOZnI?si=fu6ATH8P4AfWgesN" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen loading="lazy"></iframe>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-7">
+                    <div class="glass-card p-4 p-md-5">
+                        <small class="text-uppercase text-muted">Oil Spilling Awareness</small>
+                        <h3 class="mt-3 mb-3">Understand oil spill impacts with confidence.</h3>
+                        <p class="text-muted mb-0">
+                            Learn how early detection, real-time monitoring, and rapid response can significantly reduce the environmental damage caused by oil spills. Our AI-powered platform converts satellite imagery and drone data into clear, actionable insights, helping authorities and organizations protect marine ecosystems and coastal communities through timely, informed decisions.
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="history" class="py-5">
+
+    </section>
+
+    <footer class="py-4 border-top border-light border-opacity-10">
+        <div class="container d-flex flex-column flex-md-row justify-content-between align-items-center">
+            <span>© 2026 Project. All rights reserved.</span>
+            <small>Built with ethical AI and human-centered design.</small>
+        </div>
+    </footer>
+
+    <!-- Bootstrap Icons & JS -->
+    <link
+        rel="stylesheet"
+        href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css"
+    >
+    <script
+        src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL"
+        crossorigin="anonymous"
+    ></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            try {
+                var params = new URLSearchParams(window.location.search);
+                if (params.get('open_upload') === '1') {
+                    var input = document.getElementById('reportUpload');
+                    if (input) {
+                        input.click();
+                    }
+                }
+            } catch (e) {
+                // fail silently
+            }
+        });
+    </script>
+    <script>
+        const reportInput = document.getElementById('reportUpload');
+        const fileFeedback = document.getElementById('fileFeedback');
+        if (reportInput) {
+            reportInput.addEventListener('change', () => {
+                if (!reportInput.files || reportInput.files.length === 0) {
+                    fileFeedback.textContent = 'No files selected';
+                    return;
+                }
+                const names = Array.from(reportInput.files).map(file => file.name);
+                fileFeedback.textContent = names.join(', ');
+            });
+        }
+    </script>
+</body>
+</html>

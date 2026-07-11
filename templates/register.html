@@ -1,0 +1,76 @@
+{% extends 'base.html' %}
+
+{% block title %}Register • Oil Spilling{% endblock %}
+
+{% block content %}
+<div class="container py-4 py-md-5">
+    <div class="row justify-content-center">
+        <div class="col-lg-6">
+            <div class="glass-card p-4 p-md-5">
+                <h3 class="h4 mb-2">Sign up</h3>
+                <p class="text-muted mb-4">Get started in less than a minute.</p>
+
+                {% if error %}
+                <div class="alert alert-danger py-2 small mb-3">{{ error }}</div>
+                {% endif %}
+                {% if success %}
+                <div class="alert alert-success py-2 small mb-3">{{ success }}</div>
+                {% endif %}
+
+                <form method="post" action="{{ url_for('register') }}">
+                    <div class="row g-3">
+                        <div class="col-md-6">
+                            <label class="form-label small mb-1">Full Name</label>
+                            <input type="text" class="form-control" name="name" required>
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label small mb-1">Mobile Number</label>
+                            <input type="tel" class="form-control" name="mobile" pattern="[0-9]{10}" maxlength="10">
+                        </div>
+                        <div class="col-12">
+                            <label class="form-label small mb-1">Email Address</label>
+                            <input type="email" class="form-control" name="email" required>
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label small mb-1">City</label>
+                            <input type="text" class="form-control" name="city">
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label small mb-1">Username</label>
+                            <input type="text" class="form-control" name="username">
+                        </div>
+                        <div class="col-12">
+                            <label class="form-label small mb-1">Address</label>
+                            <textarea class="form-control" name="address" rows="2"></textarea>
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label small mb-1">Password</label>
+                            <input type="password" class="form-control" name="password" minlength="6" required>
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label small mb-1">Confirm Password</label>
+                            <input type="password" class="form-control" name="confirm_password" required>
+                        </div>
+                    </div>
+
+                    <div class="d-flex flex-column flex-sm-row justify-content-between align-items-start align-items-sm-center mt-4 mb-3">
+                        <small class="text-muted mb-2 mb-sm-0">By creating an account you agree to our terms and privacy policy.</small>
+                        <button type="submit" class="btn btn-gradient px-4">Register</button>
+                    </div>
+                </form>
+
+                <hr class="my-3">
+
+                <p class="mb-1 text-muted small">Already have an account?
+                    <a href="{{ url_for('login') }}">Log in</a>
+                </p>
+                <p class="mb-0 small">
+                    <a href="{{ url_for('index') }}">
+                        ← Back to home
+                    </a>
+                </p>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
