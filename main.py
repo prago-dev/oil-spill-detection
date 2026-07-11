@@ -21,8 +21,7 @@ ADMIN_EMAIL = os.getenv("ADMIN_EMAIL")         # yaha admin ka email
 SENDER_EMAIL = os.getenv("SENDER_EMAIL")
 SENDER_PASSWORD = os.getenv("SENDER_PASSWORD")
 #secret key
-app = Flask(__name__)
-app.secret_key = "manisha"
+app.secret_key = os.getenv("SECRET_KEY")
 
 #Mysql Connection
 app.config['MYSQL_HOST'] = 'localhost'
